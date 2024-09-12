@@ -1,33 +1,30 @@
-// package io.csd.cloudtechnology.aflowgent.interfaces.api;
+package io.csd.cloudtechnology.aflowgent.interfaces.api;
 
-// import org.springframework.http.ResponseEntity;
-// import org.springframework.web.bind.annotation.GetMapping;
-// import org.springframework.web.bind.annotation.PathVariable;
-// import org.springframework.web.bind.annotation.PostMapping;
-// import org.springframework.web.bind.annotation.RequestBody;
-// import org.springframework.web.bind.annotation.RequestMapping;
-// import org.springframework.web.bind.annotation.RequestParam;
-// import org.springframework.web.multipart.MultipartFile;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
-// import io.csd.cloudtechnology.aflowgent.dtoResponse.KMdto.CreateKnowledgeDto;
-// import io.csd.cloudtechnology.aflowgent.dtoResponse.KMdto.KnowledgeDto;
-// import io.csd.cloudtechnology.aflowgent.dtoResponse.KMdto.RsKnowledgeFilePreviewDto;viewDto;
+import io.csd.cloudtechnology.aflowgent.dtoResponse.KMDtoResponse;
+@RequestMapping("/ChatAgent/v1/knowledges")
+public interface KMApi {
 
-// @RequestMapping("/AflowGent/v1/knowledges")
-// public interface KMApi {
+    @PostMapping
+    public ResponseEntity<KMDtoResponse> createKM(
+        @RequestParam("request") String requestJson,
+        @RequestParam("file") MultipartFile file) throws Exception;
 
-//     @PostMapping
-//     public ResponseEntity<KnowledgeDto> createKnowledge(
-//         @RequestBody CreateKnowledgeDto createKnowledgeDto);
+    // @GetMapping("/{KMId}")
+    // public ResponseEntity<KMDtoResponse> getKMById(
+    //     @PathVariable("KMId") String KMId) throws Exception;
 
-//     @GetMapping("/{knowledgeId}")
-//     public ResponseEntity<KnowledgeDto> getKnowledgeById(
-//         @PathVariable("knowledgeId") String knowledgeId);
+    // @PutMapping("/{KMId}")
+    // public ResponseEntity<KMDtoResponse> updateKM(
+    //     @PathVariable("KMId") String KMId, 
+    //     @RequestBody UpdateKMRequest request);
 
-//     @PostMapping("/{knowledgeId}/filePreview")
-//     public ResponseEntity<RsKnowledgeFilePreviewDto> reviewKnowledgeFile(
-//         @PathVariable("knowledgeId") String knowledgeId,
-//         @RequestParam("file") MultipartFile file,
-//         @RequestParam("maxSegmentSize") Integer maxSegmentSize,
-//         @RequestParam("maxOverlapSize") Integer maxOverlapSize);
-// }
+    // @DeleteMapping("/{KMId}")
+    // public ResponseEntity<Void> deleteKM(
+    //     @PathVariable("KMId") String KMId) throws Exception;
+}

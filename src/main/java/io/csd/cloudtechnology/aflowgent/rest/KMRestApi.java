@@ -1,54 +1,84 @@
-// package io.csd.cloudtechnology.aflowgent.rest;
+package io.csd.cloudtechnology.aflowgent.rest;
 
-// import org.springframework.http.HttpStatus;
-// import org.springframework.http.ResponseEntity;
-// import org.springframework.stereotype.Controller;
-// import org.springframework.web.bind.annotation.PathVariable;
-// import org.springframework.web.bind.annotation.RequestBody;
-// import org.springframework.web.bind.annotation.RequestParam;
-// import org.springframework.web.multipart.MultipartFile;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
-// import io.csd.cloudtechnology.aflowgent.dtoResponse.KMdto.CreateKnowledgeDto;
-// import io.csd.cloudtechnology.aflowgent.dtoResponse.KMdto.KnowledgeDto;
-// import io.csd.cloudtechnology.aflowgent.dtoResponse.KMdto.RsKnowledgeFilePreviewDto;
-// import io.csd.cloudtechnology.aflowgent.interfaces.api.KMApi;
-// import io.csd.cloudtechnology.aflowgent.service.KMService;
-// import lombok.RequiredArgsConstructor;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
-// @Controller
-// @RequiredArgsConstructor
-// public class KMRestApi implements KMApi {
+import io.csd.cloudtechnology.aflowgent.dtoMapper.KMDtoMapper;
+import io.csd.cloudtechnology.aflowgent.dtoRequest.CreateKMRequest;
+import io.csd.cloudtechnology.aflowgent.dtoResponse.KMDtoResponse;
+import io.csd.cloudtechnology.aflowgent.interfaces.api.KMApi;
+import io.csd.cloudtechnology.aflowgent.model.KM;
+import io.csd.cloudtechnology.aflowgent.service.KMService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
-//     private final KMService kmService;
+@Slf4j
+@Controller
+@RequiredArgsConstructor
+public class KMRestApi implements KMApi {
 
-//     @Override
-//     public ResponseEntity<KnowledgeDto> createKnowledge(
-//         @RequestBody CreateKnowledgeDto createKnowledgeDto) {
+    private final KMService kmService;
+    private final ObjectMapper objectMapper;
+    private final KMDtoMapper kmDtoMapper;  // 新增 KMDtoMapper
 
-//         KnowledgeDto createdKnowledge = kmService.createKnowledge(createKnowledgeDto);
-//         return ResponseEntity.status(HttpStatus.CREATED).body(createdKnowledge);
-//     }
+    @Override
+    public ResponseEntity<KMDtoResponse> createKM(
+        @RequestParam("request") String requestJson,
+        @RequestParam("file") MultipartFile file) throws Exception {
 
-//     @Override
-//     public ResponseEntity<KnowledgeDto> getKnowledgeById(
-//         @PathVariable("knowledgeId") String knowledgeId) {
+        // 將 requestJson 轉換為 CreateKMRequest 對象
+        CreateKMRequest request = objectMapper.readValue(requestJson, CreateKMRequest.class);
+        
+        if (file != null) {
+            KM createdKM = kmService.createKM(request, file);
+            // 使用 kmDtoMapper 生成 KMDtoResponse
+            KMDtoResponse kmDtoResponse = kmDtoMapper.toDto(createdKM);
 
-//         KnowledgeDto knowledge = kmService.getKnowledgeById(knowledgeId);
-//         if (knowledge != null) {
-//             return ResponseEntity.ok(knowledge);
-//         } else {
-//             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-//         }
-//     }
+            return ResponseEntity.status(HttpStatus.CREATED).body(kmDtoResponse);
+        }
 
-//     @Override
-//     public ResponseEntity<RsKnowledgeFilePreviewDto> reviewKnowledgeFile(
-//         @PathVariable("knowledgeId") String knowledgeId,
-//         @RequestParam("file") MultipartFile file,
-//         @RequestParam("maxSegmentSize") Integer maxSegmentSize,
-//         @RequestParam("maxOverlapSize") Integer maxOverlapSize) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+    }
 
-//         RsKnowledgeFilePreviewDto previewResponse = kmService.reviewKnowledgeFile(knowledgeId, file, maxSegmentSize, maxOverlapSize);
-//         return ResponseEntity.ok(previewResponse);
-//     }
-// }
+    // @Override
+    // public ResponseEntity<KMDtoResponse> getKMById(
+    //     @PathVariable("KMId") String KMId) throws Exception {
+
+    //     Optional<KM> kmOpt = kmService.getKMById(KMId);
+    //     if (kmOpt.isPresent()) {
+    //         // 使用 kmDtoMapper 生成 KMDtoResponse
+    //         KMDtoResponse kmDtoResponse = kmDtoMapper.toDto(kmOpt.get());
+    //         return new ResponseEntity<>(kmDtoResponse, HttpStatus.OK);
+    //     } else {
+    //         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    //     }
+    // }
+
+    // @Override
+    // public ResponseEntity<KMDtoResponse> updateKM(
+    //     @PathVariable("KMId") String KMId, 
+    //     @RequestBody UpdateKMRequest request) {
+
+    //     Optional<KM> kmOpt = kmService.updateKM(KMId, request);
+    //     if (kmOpt.isPresent()) {
+    //         // 使用 kmDtoMapper 生成 KMDtoResponse
+    //         KMDtoResponse kmDtoResponse = kmDtoMapper.toDto(kmOpt.get());
+    //         return ResponseEntity.status(HttpStatus.OK).body(kmDtoResponse);
+    //     } else {
+    //         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    //     }
+    // }
+
+    // @Override
+    // public ResponseEntity<Void> deleteKM(
+    //     @PathVariable("KMId") String KMId) throws Exception {
+
+    //     kmService.deleteKM(KMId);
+    //     return new ResponseEntity<>(HttpStatus.OK);
+    // }
+}

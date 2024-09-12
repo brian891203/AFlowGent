@@ -1,0 +1,23 @@
+package io.csd.cloudtechnology.aflowgent.mapper;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import org.springframework.jdbc.core.RowMapper;
+
+import io.csd.cloudtechnology.aflowgent.model.KM;
+
+public class KMRowMapper implements RowMapper<KM> {
+
+    @Override
+    public KM mapRow(ResultSet rs, int rowNum) throws SQLException {
+        KM km = new KM();
+        km.setId(rs.getString("id"));
+        km.setFileName(rs.getString("file_name"));
+        km.setFileType(rs.getString("file_type"));
+        km.setUploadedBy(rs.getString("uploaded_by"));
+        km.setVectorStoreId(rs.getString("vector_store_id"));
+        // km.setMetadata(rs.getString("metadata"));
+        return km;
+    }
+}
