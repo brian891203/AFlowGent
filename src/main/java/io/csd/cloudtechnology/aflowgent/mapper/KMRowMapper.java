@@ -16,6 +16,7 @@ public class KMRowMapper implements RowMapper<KM> {
         km.setFileName(rs.getString("file_name"));
         km.setFileType(rs.getString("file_type"));
         km.setUploadedBy(rs.getString("uploaded_by"));
+        km.setUploadedAt(rs.getTimestamp("uploaded_at"));
         km.setVectorStoreId(rs.getString("vector_store_id"));
         // km.setMetadata(rs.getString("metadata"));
         return km;

@@ -16,6 +16,8 @@ import java.util.stream.Collectors;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
+import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.springframework.ai.document.Document;
@@ -46,7 +48,7 @@ public class KMService {
     // Create KM with a file
     public KM createKM(CreateKMRequest request, MultipartFile file) throws IOException {
         KM km = new KM();
-        km.setId(UUID.randomUUID().toString());
+        km.setId(StringUtils.lowerCase(RandomStringUtils.randomAlphanumeric(6)));
         km.setFileName(file.getOriginalFilename());
         km.setFileType(determineFileType(file));
         km.setUploadedBy(request.getUploadedBy());

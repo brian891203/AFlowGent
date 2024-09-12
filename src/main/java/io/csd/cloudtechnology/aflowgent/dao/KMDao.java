@@ -30,7 +30,7 @@ public class KMDao {
                 "VALUES (:id, :fileName, :fileType, :uploadedAt, :uploadedBy, :vectorStoreId)";
 
         MapSqlParameterSource params = new MapSqlParameterSource()
-                .addValue("id", UUID.fromString(km.getId().toString()))
+                .addValue("id",km.getId())
                 .addValue("fileName", km.getFileName())
                 .addValue("fileType", km.getFileType())
                 .addValue("uploadedAt", km.getUploadedAt())
@@ -57,7 +57,7 @@ public class KMDao {
     // Update KM record
     public void updateKM(KM km) {
         String sql = "UPDATE tb_rag_files SET file_name = :fileName, file_type = :fileType, " +
-                "uploaded_by = :uploadedBy, metadata = :metadata WHERE id = :id";
+                "uploaded_by = :uploadedBy WHERE id = :id";
 
         MapSqlParameterSource params = new MapSqlParameterSource()
                 .addValue("id", km.getId())
@@ -82,7 +82,7 @@ public class KMDao {
 
     // Get all KMs
     public List<KM> getAllKM() {
-        String sql = "SELECT id, file_name, file_type, uploaded_at, uploaded_by, vector_store_id, metadata " +
+        String sql = "SELECT id, file_name, file_type, uploaded_at, uploaded_by, vector_store_id" +
                 "FROM tb_rag_files";
 
         return namedParameterJdbcTemplate.query(sql, new KMRowMapper());

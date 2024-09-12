@@ -1,8 +1,12 @@
 package io.csd.cloudtechnology.aflowgent.rest;
 
+import java.util.Optional;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -10,6 +14,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.csd.cloudtechnology.aflowgent.dtoMapper.KMDtoMapper;
 import io.csd.cloudtechnology.aflowgent.dtoRequest.CreateKMRequest;
+import io.csd.cloudtechnology.aflowgent.dtoRequest.UpdateKMRequest;
 import io.csd.cloudtechnology.aflowgent.dtoResponse.KMDtoResponse;
 import io.csd.cloudtechnology.aflowgent.interfaces.api.KMApi;
 import io.csd.cloudtechnology.aflowgent.model.KM;
@@ -45,40 +50,40 @@ public class KMRestApi implements KMApi {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
     }
 
-    // @Override
-    // public ResponseEntity<KMDtoResponse> getKMById(
-    //     @PathVariable("KMId") String KMId) throws Exception {
+    @Override
+    public ResponseEntity<KMDtoResponse> getKMById(
+        @PathVariable("KMId") String KMId) throws Exception {
 
-    //     Optional<KM> kmOpt = kmService.getKMById(KMId);
-    //     if (kmOpt.isPresent()) {
-    //         // 使用 kmDtoMapper 生成 KMDtoResponse
-    //         KMDtoResponse kmDtoResponse = kmDtoMapper.toDto(kmOpt.get());
-    //         return new ResponseEntity<>(kmDtoResponse, HttpStatus.OK);
-    //     } else {
-    //         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    //     }
-    // }
+        Optional<KM> kmOpt = kmService.getKMById(KMId);
+        if (kmOpt.isPresent()) {
+            // 使用 kmDtoMapper 生成 KMDtoResponse
+            KMDtoResponse kmDtoResponse = kmDtoMapper.toDto(kmOpt.get());
+            return new ResponseEntity<>(kmDtoResponse, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
 
-    // @Override
-    // public ResponseEntity<KMDtoResponse> updateKM(
-    //     @PathVariable("KMId") String KMId, 
-    //     @RequestBody UpdateKMRequest request) {
+    @Override
+    public ResponseEntity<KMDtoResponse> updateKM(
+        @PathVariable("KMId") String KMId, 
+        @RequestBody UpdateKMRequest request) {
 
-    //     Optional<KM> kmOpt = kmService.updateKM(KMId, request);
-    //     if (kmOpt.isPresent()) {
-    //         // 使用 kmDtoMapper 生成 KMDtoResponse
-    //         KMDtoResponse kmDtoResponse = kmDtoMapper.toDto(kmOpt.get());
-    //         return ResponseEntity.status(HttpStatus.OK).body(kmDtoResponse);
-    //     } else {
-    //         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    //     }
-    // }
+        Optional<KM> kmOpt = kmService.updateKM(KMId, request);
+        if (kmOpt.isPresent()) {
+            // 使用 kmDtoMapper 生成 KMDtoResponse
+            KMDtoResponse kmDtoResponse = kmDtoMapper.toDto(kmOpt.get());
+            return ResponseEntity.status(HttpStatus.OK).body(kmDtoResponse);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
 
-    // @Override
-    // public ResponseEntity<Void> deleteKM(
-    //     @PathVariable("KMId") String KMId) throws Exception {
+    @Override
+    public ResponseEntity<Void> deleteKM(
+        @PathVariable("KMId") String KMId) throws Exception {
 
-    //     kmService.deleteKM(KMId);
-    //     return new ResponseEntity<>(HttpStatus.OK);
-    // }
+        kmService.deleteKM(KMId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }
