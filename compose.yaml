@@ -8,30 +8,16 @@ services:
     labels:
       - "org.springframework.boot.service-connection=postgres"
     ports:
-      - '5432:5432'
+      - '5430:5432'
       
-  # mongodb:
-  #   image: 'mongo:latest'
-  #   environment:
-  #     - 'MONGO_INITDB_DATABASE=mydatabase'
-  #     - 'MONGO_INITDB_ROOT_USERNAME=myuser'
-  #     - 'MONGO_INITDB_ROOT_PASSWORD=secret'
-  #   ports:
-  #     - '27017:27017'
-  #   volumes:
-  #     - ./data/db:/data/db
-  #   container_name: mongodb_container
-  #   networks:
-  #     - ollama-docker
-
   ollama:
     image: ollama/ollama:latest
     ports:
-      - 7869:11434
+      - 7870:11434
     volumes:
       - .:/code
       - ../models/ollama/ollama:/root/.ollama
-    container_name: ollama_latest
+    container_name: ollama_latest_chatAgent
     pull_policy: always
     tty: true
     environment:
