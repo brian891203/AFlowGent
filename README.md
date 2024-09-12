@@ -26,6 +26,7 @@ G --> K[回覆解答]
 :::
 
 schema:
+
 CREATE EXTENSION IF NOT EXISTS vector;
 CREATE EXTENSION IF NOT EXISTS hstore;
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
