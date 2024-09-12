@@ -1,0 +1,41 @@
+spring:
+  application:
+    name: a-flow-gent
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/question
+    username: root
+    password: springboot
+  jackson:
+    time-zone: GMT+8
+    date-format: 'yyyy-MM-dd HH:mm:ss'
+
+  ai:
+    vectorstore:
+      pgvector:
+        initialize-schema: true
+        index-type: none
+        distance-type: COSINE_DISTANCE
+        dimensions: 4096   # 1536 for UNSW indexes
+        schema-validation: true
+        # remove-existing-vector-store-table: true
+
+    azure:
+      openai:
+        api-key: 2933c0c5028844ac83b5071171cb9a5f
+        endpoint: https://api-csd-lab-je.openai.azure.com/
+        chat:
+          options:
+            deployment-name: gpt-4o
+            temperature: 0.7
+
+    ollama:
+      base-url: http://localhost:7869
+      chat:
+        model: mistral
+        options:
+          model: mistral
+          temperature: 0.7
+      embedding:
+        options:
+          model: mistral

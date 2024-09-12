@@ -1,0 +1,105 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.2.7'
+	id 'io.spring.dependency-management' version '1.1.5'
+}
+
+group = 'io.csd.cloudtechnology'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(21)
+	}
+}
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+	maven { url 'https://repo.spring.io/milestone' }
+}
+
+ext {
+	set('springAiVersion', "1.0.0-M1")
+	set('springCloudGcpVersion', "5.4.3")
+	set('springCloudVersion', "2023.0.3")
+	set('springModulithVersion', "1.1.6")
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter'
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	// implementation 'org.springframework.boot:spring-boot-starter-cache'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
+	// implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	// implementation 'org.springframework.boot:spring-boot-starter-data-rest'
+	// implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	// implementation 'com.google.cloud:spring-cloud-gcp-starter'
+	// implementation 'com.google.cloud:spring-cloud-gcp-starter-pubsub'
+	// implementation 'com.google.cloud:spring-cloud-gcp-starter-storage'
+	implementation 'io.micrometer:micrometer-tracing-bridge-brave'
+	// implementation 'org.liquibase:liquibase-core'
+	implementation 'org.apache.commons:commons-lang3:3.12.0'
+	// AI
+	// implementation 'org.springframework.ai:spring-ai-azure-openai-spring-boot-starter'
+	implementation 'org.springframework.ai:spring-ai-ollama-spring-boot-starter'
+	// implementation 'org.springframework.ai:spring-ai-pgvector-store-spring-boot-starter'
+	// implementation 'org.springframework.ai:spring-ai-vertex-ai-gemini-spring-boot-starter'
+	// implementation 'org.springframework.ai:spring-ai-openai'
+	// implementation 'org.springframework.ai:spring-ai-azure-openai'
+	// Vector Store
+	implementation 'org.springframework.ai:spring-ai-pgvector-store-spring-boot-starter'
+	// Cloud
+	// implementation 'org.springframework.cloud:spring-cloud-stream'
+	// implementation 'org.springframework.modulith:spring-modulith-starter-core'
+	// implementation 'org.springframework.modulith:spring-modulith-starter-jdbc'
+	// implementation 'org.springframework.modulith:spring-modulith-starter-jpa'
+	// Apache PDFBox for PDF processing
+    implementation 'org.apache.pdfbox:pdfbox:2.0.29'
+    // Apache Commons CSV for CSV processing
+    implementation 'org.apache.commons:commons-csv:1.10.0'
+	compileOnly 'org.projectlombok:lombok'
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+	developmentOnly 'org.springframework.boot:spring-boot-docker-compose'
+	// runtimeOnly 'io.micrometer:micrometer-registry-prometheus'
+	runtimeOnly 'org.postgresql:postgresql'
+	// runtimeOnly 'org.springframework.modulith:spring-modulith-actuator'
+	// runtimeOnly 'org.springframework.modulith:spring-modulith-observability'
+	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+	annotationProcessor 'org.projectlombok:lombok'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.springframework.boot:spring-boot-testcontainers'
+	// testImplementation 'org.springframework.cloud:spring-cloud-stream-test-binder'
+	// testImplementation 'org.springframework.modulith:spring-modulith-starter-test'
+	// testImplementation 'org.testcontainers:gcloud'
+	testImplementation 'org.testcontainers:junit-jupiter'
+	testImplementation 'org.testcontainers:postgresql'
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+	implementation 'org.mapstruct:mapstruct:1.5.2.Final'
+    annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.2.Final'
+}
+
+dependencyManagement {
+	imports {
+		mavenBom "org.springframework.modulith:spring-modulith-bom:${springModulithVersion}"
+		mavenBom "org.springframework.ai:spring-ai-bom:${springAiVersion}"
+		mavenBom "com.google.cloud:spring-cloud-gcp-dependencies:${springCloudGcpVersion}"
+		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+	}
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
+
+tasks.withType(JavaCompile) {
+    options.annotationProcessorPath = configurations.annotationProcessor
+}
