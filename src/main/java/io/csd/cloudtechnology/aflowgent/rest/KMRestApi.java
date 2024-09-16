@@ -1,12 +1,13 @@
 package io.csd.cloudtechnology.aflowgent.rest;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -65,11 +66,25 @@ public class KMRestApi implements KMApi {
     }
 
     @Override
-    public ResponseEntity<KMDtoResponse> updateKM(
-        @PathVariable("KMId") String KMId, 
-        @RequestBody UpdateKMRequest request) {
+    public ResponseEntity<List<KMDtoResponse>> getAllKM() {
+        List<KM> kmList = kmService.getAllKM();
+        List<KMDtoResponse> responseList = kmList.stream()
+            .map(kmDtoMapper::toDto)
+            .collect(Collectors.toList());
 
-        Optional<KM> kmOpt = kmService.updateKM(KMId, request);
+        return ResponseEntity.status(HttpStatus.OK).body(responseList);
+    }
+
+    @Override
+    public ResponseEntity<KMDtoResponse> updateKM(
+        @PathVariable("KMId") String KMId,
+        @RequestParam("request") String requestJson,
+        @RequestParam(value = "file", required = false) MultipartFile file) throws Exception {
+
+        // 將 requestJson 轉換為 CreateKMRequest 對象
+        UpdateKMRequest request = objectMapper.readValue(requestJson, UpdateKMRequest.class);
+
+        Optional<KM> kmOpt = kmService.updateKM(KMId, request, file);
         if (kmOpt.isPresent()) {
             // 使用 kmDtoMapper 生成 KMDtoResponse
             KMDtoResponse kmDtoResponse = kmDtoMapper.toDto(kmOpt.get());

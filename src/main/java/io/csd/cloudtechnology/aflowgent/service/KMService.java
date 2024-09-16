@@ -70,19 +70,31 @@ public class KMService {
     }
 
     // Update an existing KM
-    public Optional<KM> updateKM(String kmId, UpdateKMRequest request) {
+    public Optional<KM> updateKM(String kmId, UpdateKMRequest request, MultipartFile file) throws IOException {
         Optional<KM> existingKMOpt = getKMById(kmId);
         if (existingKMOpt.isPresent()) {
             KM existingKM = existingKMOpt.get();
+            existingKM.setUploadedAt(Timestamp.from(ZonedDateTime.now().toInstant()));
 
             if (request.getFileName() != null) {
-                existingKM.setFileName(request.getFileName());
+                existingKM.setFileName(file.getOriginalFilename());
             }
             if (request.getFileType() != null) {
                 existingKM.setFileType(request.getFileType());
             }
             if (request.getUploadedBy() != null) {
                 existingKM.setUploadedBy(request.getUploadedBy());
+            }
+
+            if (file != null) {
+                String content = extractContent(file);
+                List<Double> embedding = embeddingModel.embed(content);
+
+                pgVectorStore.delete(Collections.singletonList(existingKM.getVectorStoreId().toString()));
+        
+                Document document = new Document(existingKM.getVectorStoreId().toString(), content, Map.of("filename", file.getOriginalFilename()));
+                document.setEmbedding(embedding);
+                pgVectorStore.add(Collections.singletonList(document));
             }
 
             kmDao.updateKM(existingKM);
@@ -98,6 +110,10 @@ public class KMService {
     // Retrieve a KM by ID
     public Optional<KM> getKMById(String id) {
         return kmDao.getKMById(id);
+    }
+
+    public List<KM> getAllKM() {
+        return kmDao.getAllKM();
     }
 
     // Delete a KM by ID

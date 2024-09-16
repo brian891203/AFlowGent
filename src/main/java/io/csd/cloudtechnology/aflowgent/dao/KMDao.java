@@ -82,8 +82,7 @@ public class KMDao {
 
     // Get all KMs
     public List<KM> getAllKM() {
-        String sql = "SELECT id, file_name, file_type, uploaded_at, uploaded_by, vector_store_id" +
-                "FROM tb_rag_files";
+        String sql = "SELECT id, file_name, file_type, uploaded_at, uploaded_by, vector_store_id FROM tb_rag_files";
 
         return namedParameterJdbcTemplate.query(sql, new KMRowMapper());
     }
