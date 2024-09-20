@@ -53,6 +53,7 @@ public class KMService {
         km.setFileType(determineFileType(file));
         km.setUploadedBy(request.getUploadedBy());
         km.setVectorStoreId(UUID.randomUUID().toString());
+        km.setSystemPrompt(request.getSystemPrompt());
 
         km.setUploadedAt(Timestamp.from(ZonedDateTime.now().toInstant()));
         kmDao.createKM(km);

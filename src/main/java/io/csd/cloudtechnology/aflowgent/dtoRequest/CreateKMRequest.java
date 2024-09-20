@@ -9,14 +9,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CreateKMRequest {
-    @NotNull(message = "fileName is required")
-    private String fileName; // 文件名
+    // @NotNull(message = "fileName is required")
+    // private String fileName; // 文件名
 
-    @NotNull(message = "fileType is required")
-    private String fileType; // 文件類型 (如 txt, pdf 等)
+    // @NotNull(message = "fileType is required")
+    // private String fileType; // 文件類型 (如 txt, pdf 等)
 
     @NotNull(message = "uploadedBy is required")
     private String uploadedBy; // 上傳文件的用戶 ID
     
-    // private String metadata; // 文件的元數據 (JSON 格式)
+    @NotNull(message = "systemPrompt is required")
+    private String systemPrompt; // 系統提示
 }

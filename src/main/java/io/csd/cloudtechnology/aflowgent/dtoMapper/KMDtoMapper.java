@@ -19,7 +19,7 @@ public interface KMDtoMapper {
     @Mapping(source = "uploadedAt", target = "uploadedAt")
     @Mapping(source = "uploadedBy", target = "uploadedBy")
     @Mapping(source = "vectorStoreId", target = "vectorStoreId")
-    // @Mapping(source = "metadata", target = "metadata")
+    @Mapping(source = "systemPrompt", target = "systemPrompt")
     KMDtoResponse toDto(KM km);
 
     // KMDtoResponse to KM
@@ -29,6 +29,6 @@ public interface KMDtoMapper {
     @Mapping(source = "uploadedAt", target = "uploadedAt")
     @Mapping(source = "uploadedBy", target = "uploadedBy")
     @Mapping(source = "vectorStoreId", target = "vectorStoreId")
-    // @Mapping(source = "metadata", target = "metadata")
+    @Mapping(source = "systemPrompt", target = "systemPrompt")
     KM toEntity(KMDtoResponse dto);
 }
