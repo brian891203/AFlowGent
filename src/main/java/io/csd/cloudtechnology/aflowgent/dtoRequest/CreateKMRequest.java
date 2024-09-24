@@ -20,4 +20,7 @@ public class CreateKMRequest {
     
     @NotNull(message = "systemPrompt is required")
     private String systemPrompt; // 系統提示
+
+    @NotNull(message = "description is required")
+    private String description;
 }

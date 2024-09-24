@@ -16,4 +16,5 @@ public class KMDtoResponse {
     private String uploadedBy; // 上傳文件的用戶 ID
     private String vectorStoreId; // 引用 vector_store 表中的 ID
     private String systemPrompt;
+    private String description;
 }

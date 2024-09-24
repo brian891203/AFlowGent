@@ -6,9 +6,7 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.sql.Timestamp;
 import java.time.ZonedDateTime;
-import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -20,7 +18,6 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
-import org.springframework.ai.document.Document;
 import org.springframework.ai.embedding.EmbeddingModel;
 import org.springframework.ai.vectorstore.PgVectorStore;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,17 +51,18 @@ public class KMService {
         km.setUploadedBy(request.getUploadedBy());
         km.setVectorStoreId(UUID.randomUUID().toString());
         km.setSystemPrompt(request.getSystemPrompt());
+        km.setDescription(request.getDescription());
 
         km.setUploadedAt(Timestamp.from(ZonedDateTime.now().toInstant()));
-        kmDao.createKM(km);
 
         String content = extractContent(file);
-        List<Double> embedding = embeddingModel.embed(content);
+        km.setContent(content);
+        kmDao.createKM(km);
 
-        Document document = new Document(km.getVectorStoreId().toString(), content, Map.of("filename", file.getOriginalFilename()));
-        document.setEmbedding(embedding);
-
-        pgVectorStore.add(Collections.singletonList(document));
+        // List<Double> embedding = embeddingModel.embed(content);
+        // Document document = new Document(km.getVectorStoreId().toString(), content, Map.of("filename", file.getOriginalFilename()));
+        // document.setEmbedding(embedding);
+        // pgVectorStore.add(Collections.singletonList(document));
 
         log.info("Uploaded and processed document with ID: {}", km.getId());
         return km;
@@ -87,15 +85,24 @@ public class KMService {
                 existingKM.setUploadedBy(request.getUploadedBy());
             }
 
+            if (request.getSystemPrompt() != null) {
+                existingKM.setSystemPrompt(request.getSystemPrompt());
+            }
+
+            if (request.getDescription() != null) {
+                existingKM.setDescription(request.getDescription());
+            }
+
             if (file != null) {
                 String content = extractContent(file);
-                List<Double> embedding = embeddingModel.embed(content);
+                existingKM.setContent(content);
 
-                pgVectorStore.delete(Collections.singletonList(existingKM.getVectorStoreId().toString()));
+                // List<Double> embedding = embeddingModel.embed(content);
+                // pgVectorStore.delete(Collections.singletonList(existingKM.getVectorStoreId().toString()));
         
-                Document document = new Document(existingKM.getVectorStoreId().toString(), content, Map.of("filename", file.getOriginalFilename()));
-                document.setEmbedding(embedding);
-                pgVectorStore.add(Collections.singletonList(document));
+                // Document document = new Document(existingKM.getVectorStoreId().toString(), content, Map.of("filename", file.getOriginalFilename()));
+                // document.setEmbedding(embedding);
+                // pgVectorStore.add(Collections.singletonList(document));
             }
 
             kmDao.updateKM(existingKM);

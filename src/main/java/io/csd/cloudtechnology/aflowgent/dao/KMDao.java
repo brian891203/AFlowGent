@@ -26,8 +26,8 @@ public class KMDao {
 
     // Create KM record
     public void createKM(KM km) {
-        String sql = "INSERT INTO tb_rag_files (id, file_name, file_type, uploaded_at, uploaded_by, vector_store_id, system_prompt) " +
-                "VALUES (:id, :fileName, :fileType, :uploadedAt, :uploadedBy, :vectorStoreId, :systemPrompt)";
+        String sql = "INSERT INTO tb_rag_files (id, file_name, file_type, uploaded_at, uploaded_by, vector_store_id, system_prompt, content, description) " +
+                "VALUES (:id, :fileName, :fileType, :uploadedAt, :uploadedBy, :vectorStoreId, :systemPrompt, :content, :description)";
 
         MapSqlParameterSource params = new MapSqlParameterSource()
                 .addValue("id", km.getId())
@@ -36,7 +36,9 @@ public class KMDao {
                 .addValue("uploadedAt", km.getUploadedAt())
                 .addValue("uploadedBy", km.getUploadedBy())
                 .addValue("vectorStoreId", UUID.fromString(km.getVectorStoreId().toString()))
-                .addValue("systemPrompt", km.getSystemPrompt());
+                .addValue("systemPrompt", km.getSystemPrompt())
+                .addValue("content", km.getContent())
+                .addValue("description", km.getDescription());
 
         namedParameterJdbcTemplate.update(sql, params);
         log.info("Created KM with ID: {}", km.getId());
@@ -44,7 +46,7 @@ public class KMDao {
 
     // Retrieve KM by ID
     public Optional<KM> getKMById(String id) {
-        String sql = "SELECT id, file_name, file_type, uploaded_at, uploaded_by, vector_store_id, system_prompt " +
+        String sql = "SELECT id, file_name, file_type, uploaded_at, uploaded_by, vector_store_id, system_prompt, content, description " +
                 "FROM tb_rag_files WHERE id = :id";
 
         MapSqlParameterSource params = new MapSqlParameterSource("id", id);
@@ -57,14 +59,16 @@ public class KMDao {
     // Update KM record
     public void updateKM(KM km) {
         String sql = "UPDATE tb_rag_files SET file_name = :fileName, file_type = :fileType, " +
-                "uploaded_by = :uploadedBy, system_prompt = :systemPrompt WHERE id = :id";
+                "uploaded_by = :uploadedBy, system_prompt = :systemPrompt, content = :content, description = :description WHERE id = :id";
 
         MapSqlParameterSource params = new MapSqlParameterSource()
                 .addValue("id", km.getId())
                 .addValue("fileName", km.getFileName())
                 .addValue("fileType", km.getFileType())
                 .addValue("uploadedBy", km.getUploadedBy())
-                .addValue("systemPrompt", km.getSystemPrompt());
+                .addValue("systemPrompt", km.getSystemPrompt())
+                .addValue("content", km.getContent())
+                .addValue("description", km.getDescription());
 
         namedParameterJdbcTemplate.update(sql, params);
         log.info("Updated KM with ID: {}", km.getId());
@@ -82,7 +86,7 @@ public class KMDao {
 
     // Get all KMs
     public List<KM> getAllKM() {
-        String sql = "SELECT id, file_name, file_type, uploaded_at, uploaded_by, vector_store_id, system_prompt FROM tb_rag_files";
+        String sql = "SELECT id, file_name, file_type, uploaded_at, uploaded_by, vector_store_id, system_prompt, content, description FROM tb_rag_files";
 
         return namedParameterJdbcTemplate.query(sql, new KMRowMapper());
     }

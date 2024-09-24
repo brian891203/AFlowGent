@@ -16,7 +16,7 @@ services:
       - 7870:11434
     volumes:
       - .:/code
-      - ../ollama_mistral:/root/.ollama
+      - ../ollama_llama3:/root/.ollama
     container_name: ollama_latest_chatAgent
     pull_policy: always
     tty: true
