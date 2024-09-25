@@ -1,5 +1,4 @@
 package io.ChatAgent.vectorStore;
-// package io.csd.cloudtechnology.vectorStore;
 
 // import org.springframework.ai.vectorstore.PgVectorStore;
 // import org.springframework.beans.factory.annotation.Autowired;
