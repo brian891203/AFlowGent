@@ -155,7 +155,7 @@ public class KMService {
         }
 
         int byteSize = content.getBytes(StandardCharsets.UTF_8).length;
-        int maxAllowedSize = 65535;
+        int maxAllowedSize = 10485760;
         if (byteSize > maxAllowedSize) {
             throw new IOException("Content exceeds the maximum allowed size of " + maxAllowedSize + " bytes");
         }

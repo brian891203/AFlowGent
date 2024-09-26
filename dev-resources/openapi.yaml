@@ -8,7 +8,7 @@ info:
     name: SamZhu
     url: 'https://lab.60sec.dev'
     email: samzhu@60sec.dev
-  description: 什麼是 AFlowGent
+  description: 什麼是 ChatAgent
   license:
     name: AGPL-3.0-or-later
     url: 'https://opensource.org/licenses/AGPL-3.0'

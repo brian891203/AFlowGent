@@ -1,6 +1,6 @@
 spring:
   application:
-    name: a-flow-gent
+    name: chat-agent
   datasource:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/question
@@ -9,6 +9,10 @@ spring:
   jackson:
     time-zone: GMT+8
     date-format: 'yyyy-MM-dd HH:mm:ss'
+  servlet:
+    multipart:
+      max-file-size: 50MB  # 增加最大文件大小限制
+      max-request-size: 50MB  # 增加最大請求大小限制
 
   ai:
     vectorstore:
